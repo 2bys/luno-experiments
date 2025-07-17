@@ -1,0 +1,184 @@
+################################################################################
+# PEP 621 Project Metadata                                                     #
+################################################################################
+
+# see https://peps.python.org/pep-0621/
+
+[project]
+name = "luno-experiments"
+description = "Experiments for the Paper \"Linearization Turns Neural Operators into Function-Valued Gaussian Processes\""
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = [
+    "neural-operators",
+    "laplace-approximation",
+    "gaussian-processes",
+    "bayesian-neural-networks",
+    "bayesian-deep-learning",
+    "fourier-neural-operators",
+]
+authors = [
+    { name = "Emilia Magnani", email = "emilia.magnani@uni-tuebingen.de" },
+    { name = "Marvin Pförtner", email = "marvin.pfoertner@uni-tuebingen.de" },
+    { name = "Tobias Weber", email = "t.weber@uni-tuebingen.de" },
+]
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "apebench",
+    "h5py",
+    "grain",
+    "linox @ git+https://github.com/2bys/linox.git",
+    # "luno @ git+https://github.com/MethodsOfMachineLearning/luno.git",
+    "laplax @ git+https://github.com/laplax-org/laplax.git@laplax_api",
+    "flax",
+    "pandas",
+    "ml_collections",
+    "matplotlib",
+    "torchvision",
+    "wandb",
+    "pyocclient",
+    "requests",
+    "tqdm",
+    "pytorch_lightning",
+    "IPython",
+    "tabulate",
+    "skerch",
+    "the_well",
+]
+dynamic = [
+    "version",
+]
+
+[project.optional-dependencies]
+dev = ["ruff"]
+
+[project.urls]
+luno = "https://github.com/MethodsOfMachineLearning/luno"
+github = "https://github.com/2bys/luno-experiments"
+
+[project.scripts]
+
+
+################################################################################
+# PEP 518 Build System Configuration                                           #
+################################################################################
+
+# see https://peps.python.org/pep-0518/
+
+[build-system]
+requires = [
+    "setuptools>=61",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+# see https://setuptools.pypa.io/en/stable/userguide/pyproject_config.html#setuptools-specific-configuration
+
+[tool.setuptools]
+platforms = ["any"]
+zip-safe = false
+packages = ["luno_experiments"]
+package-dir = { "" = "." }
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = { attr = "luno_experiments.__version__" }
+
+################################################################################
+# Testing Configuration                                                         #
+################################################################################
+
+# see https://docs.pytest.org/en/stable/reference/customize.html
+# see https://docs.pytest.org/en/stable/reference/reference.html#ini-options-ref
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+################################################################################
+# Linting Configuration                                                        #
+################################################################################
+
+[tool.pylint.master]
+extension-pkg-whitelist = [
+    "numpy",
+]
+load-plugins = [
+    "pylint.extensions.check_elif",
+    "pylint.extensions.docparams",
+    "pylint.extensions.docstyle",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.mccabe",
+]
+
+[tool.pylint.messages_control]
+disable = [
+    # We allow TODO comments in the following format: `# TODO (#[ISSUE NUMBER]): This needs to be done.`
+    "fixme",
+    # We want to use "mathematical notation" to name some of our variables, e.g. `A` for matrices
+    "invalid-name",
+    # Temporary ignore, see https://github.com/probabilistic-numerics/probnum/discussions/470#discussioncomment-1998097 for an explanation
+    "missing-return-doc",
+    "missing-yield-doc",
+    # This is research code...
+    "missing-class-docstring",
+    "missing-module-docstring",
+    "missing-function-docstring",
+]
+
+[tool.pylint.format]
+max-line-length = "88"
+
+[tool.pylint.design]
+max-args = 10
+max-complexity = 14
+max-locals = 20
+max-attributes = 15
+min-public-methods = 0
+
+[tool.pylint.similarities]
+ignore-imports = "yes"
+
+################################################################################
+# Formatting Configuration                                                     #
+################################################################################
+
+# see https://black.readthedocs.io/en/stable/usage_and_configuration/index.html
+
+[tool.black]
+include = '\.pyi?$'
+# If `exclude` is not set, `black` excludes all files listed in `.gitignore`.
+# The following option extends this list of ignored files.
+# see https://black.readthedocs.io/en/stable/usage_and_configuration/file_collection_and_discovery.html#gitignore
+extend-exclude = '''
+# A regex preceded with ^/ will apply only to files and directories in the root
+# of the project.
+/(
+    \.git
+    | \.hg
+)/
+'''
+
+# see https://pycqa.github.io/isort/docs/configuration/config_files.html
+# see https://pycqa.github.io/isort/docs/configuration/options.html
+
+[tool.isort]
+# see https://pycqa.github.io/isort/docs/configuration/profiles.html#black
+profile = "black"
+combine_as_imports = true
+force_sort_within_sections = true
+known_testing = ["pytest", "pytest_cases"]
+known_typing = ["typing", "numpy.typing", "jax.typing"]
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "TESTING",
+    "FIRSTPARTY",
+    "TYPING",
+    "LOCALFOLDER",
+]
