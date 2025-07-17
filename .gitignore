@@ -1,4 +1,5 @@
 # luno-experiments specific
+wandb/*
 data/*
 checkpoints/*
 models/*
